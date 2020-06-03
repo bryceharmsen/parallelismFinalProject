@@ -1,0 +1,25 @@
+bryceharmsen@bryceharmsen-HP-Pavilion-Laptop-15-cc1xx:~/Documents/college/cs473/parallelismFinalProject/omp$ g++ -o rrpp main.cpp rr.cpp rand.cpp coord.cpp benchmarker.cpp -fopenmp
+bryceharmsen@bryceharmsen-HP-Pavilion-Laptop-15-cc1xx:~/Documents/college/cs473/parallelismFinalProject/omp$ ./rrpp 1000000 12Running Railroad...
+Elapsed Time: 0.0072854 seconds
+Railroad:
+        (-0.826997, -7.369244)
+House:
+        (-0.807153, -7.363736)
+Distance:
+        0.0205941
+==== START RUNTIMES ====
+Thread  Trial Time
+1)      0.0235017 seconds
+2)      0.0118172 seconds
+3)      0.00824209 seconds
+4)      0.00885301 seconds
+5)      0.0086794 seconds
+6)      0.00748222 seconds
+7)      0.00672457 seconds
+8)      0.0061908 seconds
+9)      0.00721968 seconds
+10)     0.0076153 seconds
+11)     0.00711028 seconds
+12)     0.00716573 seconds
+===== END RUNTIMES =====
+Exiting ./rrpp successfully.

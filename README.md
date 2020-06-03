@@ -4,7 +4,8 @@ The goal of this project is to implement a parallel program in OpenMP, MPI, or C
 
 ## Problem Description
 
-Write the problem description here.
+3.15
+You are given an array of *n* records, each containing the *x* and *y* coordinates of a house. You are also given the *x* and *y* coodinates of a railroad station. Design a parallel algorithm to find the house closest to the railroad station (as the crow flies).
 
 ## Design
 
@@ -12,15 +13,15 @@ Based on Foster's methodology, this is the progression of parallelizing this pro
 
 ### Partitioning
 
-Write the partitioning step here
+Write the partitioning step here and draw a primitive tasks diagram.
 
 ### Communication
 
 Write the comm. step here
 
-### Agglomeration
+### Agglomeration and Mapping
 
-Write the agglomeration step here
+Write the agglomeration and mapping step here and draw an agglomerated tasks diagram.
 
 ### Mapping
 
