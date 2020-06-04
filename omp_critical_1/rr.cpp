@@ -1,12 +1,17 @@
 #include "rr.h"
 
+double init[3];
+
 RR::RR(int n) {
     this->n = n;
     this->r = Rand(LO, HI);
-    railroad = get_rand();
-    houses = new Coord[n];
+    railroad = new double[3];
+    get_rand(railroad);
+    houses = new double*[n];
     for (int i = 0; i < n; i++) {
-        houses[i] = get_rand();
+        houses[i] = new double[3];
+        get_rand(houses[i]);
+        houses[i][2] = __DBL_MAX__;
     }
 }
 
@@ -16,6 +21,9 @@ RR::RR(const RR &copy) {
 }
 
 RR::~RR() {
+    for (int i = 0; i < n; i++) {
+        delete[] houses[i];
+    }
     delete[] houses;
 }
 
@@ -28,54 +36,56 @@ RR RR::operator=(const RR &right) {
     return (*this);
 }
 
-Coord RR::get_rand() {
-    Coord c = Coord(r.get_rand(), r.get_rand());
-    return c;
+void RR::get_rand(double * coord) {
+    coord[0] = r.get_rand();
+    coord[1] =  r.get_rand();
+}
+
+double RR::get_dist_sq(double *h, double *r) {
+    return (h[0] - r[0]) * (h[0] - r[0]) + (h[1] - r[1]) * (h[1] - r[1]);
+}
+
+std::string RR::coord_to_string(double *coord) {
+    return "(" + std::to_string(coord[0]) +  ", " + std::to_string(coord[1]) + ")";
 }
 
 void RR::print_coords() {
     std::cout << "==== PRINT COORDINATES ====" << std::endl;
-    std::cout << "Railroad: " << railroad.to_string() << std::endl;
+    std::cout << "Railroad: " << coord_to_string(railroad) << std::endl;
     std::cout <<"Houses:" << std::endl;
     for (int i = 0; i < n; i++) {
         std::cout << "#" << i + 1 << ")\t"
-            << houses[i].to_string() << "\tdist "
-            << get_dist(railroad, houses[i]) << std::endl;
+            << coord_to_string(houses[i]) << "\tdist "
+            << get_dist(houses[i], railroad) << std::endl;
     }
     std::cout << "=======  END PRINT  =======" << std::endl;
 }
 
-void RR::print_dist_results(Coord house) {
-    std::cout << "Railroad:\n\t" << railroad.to_string() << std::endl
-    << "House:\n\t" << house.to_string() << std::endl
+void RR::print_dist_results(double *house) {
+    std::cout << "Railroad:\n\t" << coord_to_string(railroad) << std::endl
+    << "House:\n\t" << coord_to_string(house) << std::endl
     << "Distance:\n\t" << get_dist(railroad, house) << std::endl;
 }
 
-double RR::get_dist(Coord r, Coord c) {
-    return pow(get_dist_sq(r, c), 0.5);
+double RR::get_dist(double * h, double * r) {
+    return pow(get_dist_sq(h, r), 0.5);
 }
 
-double RR::get_dist_sq(Coord r, Coord c) {
-    double x_diff = r.get_x() - c.get_x(),
-           y_diff = r.get_y() - c.get_y();
-    return x_diff * x_diff + y_diff * y_diff;
-}
+double * RR::get_closest_house(int p) {
+    double *closest = houses[0], *house;
+    double closest_dist = __DBL_MAX__, dist = 0;
+    closest[2] = get_dist_sq(closest, railroad);
+    int i, closest_i = 0;
 
-Coord RR::get_closest_house(int p) {
-    Coord closest = houses[0];
-    Coord house;
-    double least_dist = __DBL_MAX__;
-    double dist;
-    int i;
     omp_set_num_threads(p);
     #pragma omp parallel for private(i, house, dist)
     for (i = 0; i < n; i++) {
         house = houses[i];
         dist = get_dist_sq(railroad, house);
-        if (dist < least_dist) {
-            #pragma omp critical
-            {
-                least_dist = dist;
+        #pragma omp critical
+        {
+            if (dist < closest_dist) {
+                closest_dist = dist;
                 closest = house;
             }
         }
@@ -84,19 +94,16 @@ Coord RR::get_closest_house(int p) {
     return closest;
 }
 
-Coord RR::check_closest_house_sequential() {
-    Coord closest = houses[0];
-    Coord house;
-    double least_dist = __DBL_MAX__;
-    double dist;
+
+double * RR::check_closest_house_sequential() {
+    double *closest = houses[0];
+    double closest_dist_sq = get_dist_sq(closest, railroad);
     int i;
+
     for (i = 0; i < n; i++) {
-        house = houses[i];
-        dist = get_dist_sq(railroad, house);
-        if (dist < least_dist) {
-                least_dist = dist;
-                closest = house;
-        }
+        houses[i][2] = get_dist_sq(houses[i], railroad);
+        if (closest[2] > houses[i][2])
+            closest = houses[i];
     }
 
     return closest;

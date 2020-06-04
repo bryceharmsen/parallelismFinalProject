@@ -76,20 +76,38 @@ double min(double out, double in) {
 }
 
 double * RR::get_closest_house(int p) {
-    double *closest = houses[0];
-    double closest_dist = __DBL_MAX__, dist = 0;
+    double *closest = houses[0],
+           *internal_closest = houses[0];
+    double closest_dist = __DBL_MAX__,
+           internal_closest_dist = __DBL_MAX__,
+           dist;
+    int i, j, closest_i = 0;
     closest[2] = get_dist_sq(closest, railroad);
-    int i, closest_i = 0;
 
     omp_set_num_threads(p);
-    #pragma omp declare reduction(dblmin:double:omp_out=min(omp_out,omp_in)) \
-    initializer(omp_priv=__DBL_MAX__)
-    #pragma omp parallel for private(i, dist) reduction(dblmin:closest_dist)
-    for (i = 0; i < n; i++) {
-        dist = get_dist_sq(houses[i], railroad);
-        houses[i][2] = dist;
-        if (closest_dist > dist)
-            closest_dist = dist;
+
+    //group houses into p balanced groups (using indexing groups, step size, blocks, etc.)
+    //trim main for loop into the number of processes/threads available
+    //inside each iteration of main for loop, find the overall min house of the available houses
+    //at main for loop, perform reduction on each processes min
+
+    //in second loop, only look through the n/p sized section for the correct record
+
+    #pragma omp parallel for private(i, j, dist) \
+    reduction(min:internal_closest_dist) \
+    reduction(min:closest_dist)
+    for (i = 0; i < p; i++) {
+        //internal_closest_dist = __DBL_MAX__;
+        for (j = i * n / p; j < (i + 1) * n / p; j++) {
+            dist = get_dist_sq(houses[j], railroad);
+            houses[j][2] = dist;
+
+            if (internal_closest_dist > dist)
+                internal_closest_dist = dist;
+        }
+
+        if (closest_dist > internal_closest_dist)
+            closest_dist = internal_closest_dist;
     }
 
     #pragma omp parallel for private(i)

@@ -71,23 +71,42 @@ double RR::get_dist(double * h, double * r) {
     return pow(get_dist_sq(h, r), 0.5);
 }
 
+double min(double out, double in) {
+    return out > in ? in : out;
+}
+
 double * RR::get_closest_house(int p) {
-    double *closest = houses[0], *house;
-    double closest_dist = __DBL_MAX__, dist = 0;
+    double *closest = houses[0],
+           *internal_closest = houses[0];
+    double closest_dist = __DBL_MAX__,
+           internal_closest_dist = __DBL_MAX__,
+           dist;
+    int i, j, closest_i = 0;
     closest[2] = get_dist_sq(closest, railroad);
-    int i, closest_i = 0;
 
     omp_set_num_threads(p);
-    #pragma omp parallel for private(i, house, dist)
-    for (i = 0; i < n; i++) {
-        house = houses[i];
-        dist = get_dist_sq(railroad, house);
-        #pragma omp critical
-        {
-            if (dist < closest_dist) {
-                closest_dist = dist;
-                closest = house;
+
+    #pragma omp parallel for private(i, j, dist, internal_closest_dist, internal_closest)
+    for (i = 0; i < p; i++) {
+        internal_closest_dist = __DBL_MAX__;
+        for (j = i * n / p; j < (i + 1) * n / p; j++) {
+            dist = get_dist_sq(houses[j], railroad);
+            houses[j][2] = dist;
+
+            if (internal_closest_dist > dist) {
+                internal_closest_dist = dist;
+                internal_closest = houses[j];
             }
+        }
+
+        if (closest_dist > internal_closest_dist) {
+    #pragma omp critical
+    {
+            if (closest_dist > internal_closest_dist) {
+                closest_dist = internal_closest_dist;
+                closest = internal_closest;
+            }
+    }
         }
     }
 

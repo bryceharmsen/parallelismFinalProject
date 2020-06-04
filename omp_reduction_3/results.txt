@@ -1,16 +1,20 @@
 ==== START RUNTIMES ====
 Threads Trial Time
-1)      0.0130688 seconds
-2)      0.00669236 seconds
-3)      0.00606867 seconds
-4)      0.00552618 seconds
-5)      0.00528357 seconds
-6)      0.00517737 seconds
-7)      0.00509232 seconds
-8)      0.00634607 seconds
-9)      0.00605155 seconds
-10)     0.00578777 seconds
-11)     0.00564964 seconds
-12)     0.00543629 seconds
+1)      0.0123164 seconds
+2)      0.00711868 seconds
+3)      0.00647428 seconds
+4)      0.00592997 seconds
+5)      0.00582257 seconds
+6)      0.00528752 seconds
+7)      0.00521959 seconds
+8)      0.00582362 seconds
+9)      0.00633733 seconds
+10)     0.00595509 seconds
+11)     0.00590928 seconds
+12)     0.00564153 seconds
+13)     0.00547597 seconds
+14)     0.00531881 seconds
+15)     0.00543611 seconds
+16)     0.00541845 seconds
 ===== END RUNTIMES =====
 Exiting ./rr successfully.

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <time.h>
+#include "coord.h"
 #include "rr.h"
 
 struct mark {
@@ -11,7 +12,7 @@ struct mark {
 };
 
 class Benchmarker {
-    const int NUM_RUNS = 20;
+    const int NUM_RUNS = 50;
     int max_procs, n;
     struct mark *marks;
     struct timespec start, finish;

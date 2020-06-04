@@ -28,7 +28,7 @@ Benchmarker::~Benchmarker() {
 
 double Benchmarker::get_avg_runtime(int p) {
     double time = 0;
-    double *c;
+    Coord c;
     
     for (int i = 0; i < NUM_RUNS; i++) {
         try {
@@ -38,10 +38,10 @@ double Benchmarker::get_avg_runtime(int p) {
         c = rr.get_closest_house(p);
         time += get_elapsed_time(start, finish);
         
-        double *check = rr.check_closest_house_sequential();
-        if (check[0] != c[0] || check[1] != c[1])
+        Coord check = rr.check_closest_house_sequential();
+        if (check.get_x() != c.get_x() || check.get_y() != c.get_y())
             throw std::runtime_error("Closest house calculation is incorrect.\n\t"
-                                    + rr.coord_to_string(check) + " != " + rr.coord_to_string(c));
+                                    + check.to_string() + " != " + c.to_string());
         } catch(std::runtime_error re) {
             std::cout << re.what() << std::endl;
         }

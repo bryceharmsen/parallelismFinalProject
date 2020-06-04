@@ -10,6 +10,10 @@ int run(char *arg1, char *arg2) {
     try {
         int num_houses = std::stoi(arg1);
         int num_threads = std::stoi(arg2);
+        RR rr = RR(num_houses);
+
+        std::cout << "Running many trials for more consistent "
+        << "runtime results. This may take a while..." << std::endl;
 
         Benchmarker bmkr = Benchmarker(num_houses, num_threads);
         struct mark * mrk = bmkr.get_runtimes();

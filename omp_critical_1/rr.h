@@ -3,8 +3,8 @@
 
 #include <omp.h>
 #include <iostream>
+#include <unordered_map>
 #include "rand.h"
-#include "coord.h"
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define LO -10.0
@@ -12,22 +12,23 @@
 
 class RR {
     int n;                  /* Number of houses */
-    Coord railroad;         /* Railroad coordinate */
-    Coord *houses;          /* Array of house coordinates */
+    double *railroad;     /* Railroad coordinate */
+    double **houses;        /* Array of house coordinates */
     Rand r = Rand(0, 0);    /* Random generator */
-    Coord get_rand();
-    double get_dist(Coord rr, Coord c);
-    double get_dist_sq(Coord rr, Coord c);
+    void get_rand(double * coord);
+    static double get_dist_sq(double *h, double *r);
+    double get_dist(double *h, double *r);
 
 public:
     RR(int n);
     RR(const RR &copy);
     RR operator=(const RR &right);
     ~RR();
-    Coord get_closest_house(int p);
-    Coord check_closest_house_sequential();
-    void print_dist_results(Coord house);
+    double * get_closest_house(int p);
+    double * check_closest_house_sequential();
+    void print_dist_results(double *house);
     void print_coords();
+    std::string coord_to_string(double *coord);
 };
 
 #endif

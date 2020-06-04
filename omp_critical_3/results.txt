@@ -1,0 +1,22 @@
+Railroad:
+        (-0.826997, -7.369244)
+House:
+        (-0.807153, -7.363736)
+Distance:
+        0.0205941
+==== START RUNTIMES ====
+Threads Trial Time
+1)      0.0231239 seconds
+2)      0.0115825 seconds
+3)      0.00799118 seconds
+4)      0.00739141 seconds
+5)      0.00763311 seconds
+6)      0.00699686 seconds
+7)      0.0063234 seconds
+8)      0.00601678 seconds
+9)      0.00720044 seconds
+10)     0.00776078 seconds
+11)     0.00714184 seconds
+12)     0.00683806 seconds
+===== END RUNTIMES =====
+Exiting ./rr successfully.

@@ -11,7 +11,7 @@ struct mark {
 };
 
 class Benchmarker {
-    const int NUM_RUNS = 20;
+    const int NUM_RUNS = 50;
     int max_procs, n;
     struct mark *marks;
     struct timespec start, finish;
