@@ -7,34 +7,11 @@ The goal of this project is to implement a parallel program in OpenMP, MPI, or C
 3.15
 You are given an array of *n* records, each containing the *x* and *y* coordinates of a house. You are also given the *x* and *y* coodinates of a railroad station. Design a parallel algorithm to find the house closest to the railroad station (as the crow flies).
 
-## Design
+## The code
 
-Based on Foster's methodology, this is the progression of parallelizing this problem:
+Each omp_\* directory contains a different implementation of the parallelized solution to problem 3.15. The different implementations are explained in the report, labelled *473_Final_Project*. The executables and source code are contained within each directory, which leads to a large amount of duplicated code among the directories. The main differences are in rr.cpp, namely in function **RR::get_closest_house(int p)**. All executable were created on Ubuntu 18.04 using g++ 7.5.0. Implementation of OpenMP requires version 3.*x* because of the use of omp-defined min reduction.
 
-### Partitioning
+In the case that you wish to compile any of this code, please run:
+```g++ -o EXEC_NAME <all .cpp files in chosen directory separated by spaces> -fopenmp```
 
-Write the partitioning step here and draw a primitive tasks diagram.
-
-### Communication
-
-Write the comm. step here
-
-### Agglomeration and Mapping
-
-Write the agglomeration and mapping step here and draw an agglomerated tasks diagram.
-
-### Mapping
-
-Write the mapping step here
-
-## Benchmarking
-
-Display information about the execution time based on *n* and *p*, comparing also to the sequential algorithm.
-
-## Theoretical Efficiency
-
-Compare parallel vs. sequential asymptotic execution time assessing computation and communication times with some big-oh claims.
-
-## Discussion
-
-Write discussion, conclusions, assessments of performance and parallel architecture of the problem here.
+For further questions, please contact Bryce Harmsen.
